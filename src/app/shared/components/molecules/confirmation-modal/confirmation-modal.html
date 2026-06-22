@@ -1,0 +1,13 @@
+@if (open()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 p-4">
+    <section class="w-full max-w-md rounded-lg bg-white p-6 shadow dark:bg-gray-800" role="dialog" aria-modal="true">
+      <h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{{ title() }}</h2>
+      <p class="mb-6 text-sm text-gray-600 dark:text-gray-300">{{ message() }}</p>
+      <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+        <app-button variant="secondary" (click)="cancel.emit()" i18n>Cancel</app-button>
+        <app-button variant="danger" [loading]="confirming()" (click)="confirm.emit()" i18n>Delete</app-button>
+      </div>
+    </section>
+  </div>
+}
+

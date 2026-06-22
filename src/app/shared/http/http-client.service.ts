@@ -3,20 +3,24 @@ import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 import { APP_CONFIG } from '../../core/config';
 import { AppError } from '../../core/errors';
 import { AUTH_TOKEN_READER } from '../../core/http';
+import { AuthSessionService } from '../auth';
 import { HttpRequestOptions } from './http-request-options';
 
 @Injectable({ providedIn: 'root' })
 export class HttpClient {
   private readonly config = inject(APP_CONFIG);
   private readonly readToken = inject(AUTH_TOKEN_READER);
+  private readonly session = inject(AuthSessionService);
   private readonly client: AxiosInstance = axios.create({
     baseURL: this.config.apiBaseUrl,
     timeout: this.config.requestTimeoutMs,
   });
 
   constructor() {
-    this.client.interceptors.request.use((request) => {
-      const token = this.readToken();
+    this.client.interceptors.request.use(async (request) => {
+      const token = isPublicAuthRequest(request.url)
+        ? null
+        : (await this.session.ensureFreshSessionToken()) ?? this.readToken();
 
       if (token) {
         request.headers.Authorization = `Bearer ${token}`;
@@ -97,6 +101,15 @@ function createRequestId(): string {
   return globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random()}`;
 }
 
+function isPublicAuthRequest(url?: string): boolean {
+  return Boolean(
+    url &&
+      ['/auth/login', '/auth/register', '/auth/refresh'].some((path) =>
+        url.endsWith(path),
+      ),
+  );
+}
+
 function mapAxiosError(error: unknown): AppError {
   if (!axios.isAxiosError(error)) {
     return {
@@ -140,4 +153,3 @@ function readHeader(
   const value = (headers as Record<string, unknown>)[key];
   return typeof value === 'string' ? value : undefined;
 }
-

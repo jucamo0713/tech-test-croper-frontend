@@ -8,6 +8,10 @@ export class ErrorMapper {
       return this.fromHttpError(error);
     }
 
+    if (this.isAppError(error)) {
+      return error;
+    }
+
     if (error instanceof Error) {
       return {
         kind: 'unknown',
@@ -44,5 +48,13 @@ export class ErrorMapper {
 
     return undefined;
   }
-}
 
+  private static isAppError(value: unknown): value is AppError {
+    if (!value || typeof value !== 'object') {
+      return false;
+    }
+
+    const candidate = value as Partial<AppError>;
+    return typeof candidate.kind === 'string' && typeof candidate.message === 'string';
+  }
+}

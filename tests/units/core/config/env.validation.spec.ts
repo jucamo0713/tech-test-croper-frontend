@@ -8,6 +8,8 @@ const validEnvironment: EnvironmentVariables = {
   DEFAULT_LOCALE: 'en-US',
   LOG_LEVEL: 'warn',
   DEFAULT_TIMEOUT_MS: 30000,
+  ACCESS_TOKEN_AUTO_REFRESH_BEFORE_EXPIRATION_MS: 180000,
+  ACCESS_TOKEN_REQUEST_REFRESH_BEFORE_EXPIRATION_MS: 300000,
 };
 
 describe('validateEnvironment', () => {
@@ -31,5 +33,14 @@ describe('validateEnvironment', () => {
         DEFAULT_TIMEOUT_MS: 0,
       }),
     ).toThrow('DEFAULT_TIMEOUT_MS');
+  });
+
+  it('rejects invalid refresh thresholds', () => {
+    expect(() =>
+      validateEnvironment({
+        ...validEnvironment,
+        ACCESS_TOKEN_AUTO_REFRESH_BEFORE_EXPIRATION_MS: 0,
+      }),
+    ).toThrow('ACCESS_TOKEN_AUTO_REFRESH_BEFORE_EXPIRATION_MS');
   });
 });

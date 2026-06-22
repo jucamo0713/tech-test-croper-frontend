@@ -1,0 +1,11 @@
+.git
+node_modules
+dist
+.angular
+coverage
+.idea
+.vscode
+npm-debug.log
+pnpm-debug.log
+Dockerfile
+.dockerignore

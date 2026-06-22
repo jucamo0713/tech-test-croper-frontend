@@ -9,6 +9,8 @@ export interface AppConfig {
   readonly logLevel: string;
   readonly nodeEnv: string;
   readonly requestTimeoutMs: number;
+  readonly accessTokenAutoRefreshBeforeExpirationMs: number;
+  readonly accessTokenRequestRefreshBeforeExpirationMs: number;
 }
 
 export const APP_CONFIG = new InjectionToken<AppConfig>('APP_CONFIG');
@@ -22,4 +24,8 @@ export const appConfigFromEnvironment: AppConfig = {
   logLevel: env.LOG_LEVEL,
   nodeEnv: env.NODE_ENV,
   requestTimeoutMs: env.DEFAULT_TIMEOUT_MS,
+  accessTokenAutoRefreshBeforeExpirationMs:
+    env.ACCESS_TOKEN_AUTO_REFRESH_BEFORE_EXPIRATION_MS,
+  accessTokenRequestRefreshBeforeExpirationMs:
+    env.ACCESS_TOKEN_REQUEST_REFRESH_BEFORE_EXPIRATION_MS,
 };

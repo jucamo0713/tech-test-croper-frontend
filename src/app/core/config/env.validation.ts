@@ -47,6 +47,24 @@ export function validateEnvironment(
     errors.push('DEFAULT_TIMEOUT_MS must be an integer between 1 and 300000');
   }
 
+  if (
+    !Number.isInteger(value.ACCESS_TOKEN_AUTO_REFRESH_BEFORE_EXPIRATION_MS) ||
+    value.ACCESS_TOKEN_AUTO_REFRESH_BEFORE_EXPIRATION_MS < 1
+  ) {
+    errors.push(
+      'ACCESS_TOKEN_AUTO_REFRESH_BEFORE_EXPIRATION_MS must be a positive integer',
+    );
+  }
+
+  if (
+    !Number.isInteger(value.ACCESS_TOKEN_REQUEST_REFRESH_BEFORE_EXPIRATION_MS) ||
+    value.ACCESS_TOKEN_REQUEST_REFRESH_BEFORE_EXPIRATION_MS < 1
+  ) {
+    errors.push(
+      'ACCESS_TOKEN_REQUEST_REFRESH_BEFORE_EXPIRATION_MS must be a positive integer',
+    );
+  }
+
   if (errors.length > 0) {
     throw new Error(`Invalid frontend environment: ${errors.join('; ')}`);
   }

@@ -1,0 +1,57 @@
+<main class="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
+  <a routerLink="/products" class="mb-4 inline-block text-sm font-medium text-blue-700 hover:underline dark:text-blue-400" i18n>Back to products</a>
+  <app-alert [message]="products.error$ | async" type="error" />
+
+  @if (products.detailLoading$ | async) {
+    <app-loader label="Loading product" />
+  } @else {
+    @if (products.selectedProduct$ | async; as product) {
+      <section class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ product.name | translatableText }}</h1>
+            <p class="mt-2 text-gray-600 dark:text-gray-300">{{ product.description | translatableText }}</p>
+          </div>
+          <div class="flex gap-2">
+            <a [routerLink]="['/products', product.productId, 'edit']">
+              <app-button variant="secondary" i18n>Edit</app-button>
+            </a>
+            <app-button variant="danger" (click)="confirmOpen.set(true)" i18n>Delete</app-button>
+          </div>
+        </div>
+
+        <dl class="mt-6 grid gap-4 sm:grid-cols-2">
+          <div>
+            <dt class="text-sm font-medium text-gray-500" i18n>Status</dt>
+            <dd class="text-gray-900 dark:text-white">{{ product.status || '-' }}</dd>
+          </div>
+          <div>
+            <dt class="text-sm font-medium text-gray-500" i18n>Product ID</dt>
+            <dd class="break-all text-gray-900 dark:text-white">{{ product.productId }}</dd>
+          </div>
+        </dl>
+
+        <section class="mt-6">
+          <h2 class="mb-3 text-lg font-semibold text-gray-900 dark:text-white" i18n>Prices</h2>
+          <div class="grid gap-2 sm:grid-cols-2">
+            @for (price of product.prices | keyvalue; track price.key) {
+              <div class="rounded-lg bg-gray-50 p-3 text-sm dark:bg-gray-900">
+                <span class="font-medium text-gray-700 dark:text-gray-300">{{ price.key }}</span>
+                <span class="ml-2 text-gray-900 dark:text-white">{{ price.value | currency: price.key : 'symbol' : '1.0-0' }}</span>
+              </div>
+            }
+          </div>
+        </section>
+      </section>
+      <app-confirmation-modal
+        [open]="confirmOpen()"
+        title="Delete product"
+        message="This action cannot be undone."
+        [confirming]="(products.deleting$ | async) ?? false"
+        (cancel)="confirmOpen.set(false)"
+        (confirm)="delete(product.productId)"
+      />
+    }
+  }
+</main>
+

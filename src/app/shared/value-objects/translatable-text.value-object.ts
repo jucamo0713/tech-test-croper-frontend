@@ -4,6 +4,11 @@ export function getLocalizedText(
   value: TranslatableText | undefined,
   preferredLang = 'es',
 ): string {
-  return value?.[preferredLang] ?? Object.values(value ?? {})[0] ?? '';
+  const languageCode = preferredLang.split('-')[0] ?? preferredLang;
+  return (
+    value?.[preferredLang] ??
+    value?.[languageCode] ??
+    Object.values(value ?? {})[0] ??
+    ''
+  );
 }
-

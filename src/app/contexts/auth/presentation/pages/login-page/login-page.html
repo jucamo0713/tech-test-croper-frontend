@@ -1,0 +1,36 @@
+<main class="flex min-h-[calc(100dvh-4rem)] items-center justify-center bg-gray-50 px-4 py-10 dark:bg-gray-900">
+  <section class="w-full max-w-md rounded-lg bg-white p-6 shadow dark:bg-gray-800 sm:p-8">
+    <h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ 'auth.login.title' | translate: 'Login' }}</h1>
+    <p class="mb-6 text-sm text-gray-600 dark:text-gray-300">{{ 'auth.login.description' | translate: 'Access your product workspace.' }}</p>
+
+    <app-alert [message]="auth.error$ | async" type="error" />
+
+    <form class="mt-4 space-y-4" [formGroup]="form" (ngSubmit)="submit()">
+      <div>
+        <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="email">{{ 'auth.form.email' | translate: 'Email' }}</label>
+        <input id="email" type="email" formControlName="email" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+        @if (shouldShowEmailError()) {
+          <p class="mt-1 text-sm text-red-600 dark:text-red-400">
+            @if (form.controls.email.hasError('required')) {
+              {{ 'auth.form.emailRequired' | translate: 'Email is required.' }}
+            } @else {
+              {{ 'auth.form.emailInvalid' | translate: 'Enter a valid email address.' }}
+            }
+          </p>
+        }
+      </div>
+      <div>
+        <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="password">{{ 'auth.form.password' | translate: 'Password' }}</label>
+        <input id="password" type="password" formControlName="password" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+        @if (shouldShowPasswordError()) {
+          <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ 'auth.form.passwordRequired' | translate: 'Password is required.' }}</p>
+        }
+      </div>
+      <app-button class="block w-full" type="submit" [loading]="(auth.loading$ | async) ?? false">{{ 'auth.login.submit' | translate: 'Login' }}</app-button>
+      <p class="text-center text-sm text-gray-600 dark:text-gray-300">
+        <span>{{ 'auth.login.noAccount' | translate: 'No account?' }}</span>
+        <a routerLink="/register" class="font-medium text-blue-700 hover:underline dark:text-blue-400">{{ 'auth.login.register' | translate: 'Register' }}</a>
+      </p>
+    </form>
+  </section>
+</main>

@@ -1,0 +1,11 @@
+<label class="sr-only" for="app-language-selector">{{ 'common.language' | translate: 'Language' }}</label>
+<select
+  id="app-language-selector"
+  class="block rounded-lg border border-gray-300 bg-gray-50 p-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+  [ngModel]="locale.currentLocale"
+  (ngModelChange)="changeLocale($event)"
+>
+  @for (item of locales; track item) {
+    <option [value]="item">{{ item }}</option>
+  }
+</select>

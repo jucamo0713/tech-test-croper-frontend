@@ -1,0 +1,45 @@
+<main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white" i18n>Products</h1>
+      <p class="text-sm text-gray-600 dark:text-gray-300" i18n>Search and manage products from the API.</p>
+    </div>
+    <a routerLink="/products/new">
+      <app-button i18n>New product</app-button>
+    </a>
+  </div>
+
+  <app-product-filters (search)="search($event)" />
+  <div class="mt-4">
+    <app-alert [message]="products.error$ | async" type="error" />
+  </div>
+
+  @if (products.loading$ | async) {
+    <app-loader label="Loading products" />
+  } @else {
+    @if (products.products$ | async; as items) {
+      @if (items.length === 0) {
+        <section class="mt-6 rounded-lg border border-dashed border-gray-300 p-8 text-center text-gray-600 dark:border-gray-700 dark:text-gray-300" i18n>
+          No products found.
+        </section>
+      } @else {
+        <section class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          @for (product of items; track product.productId) {
+            <app-product-card [product]="product" />
+          }
+        </section>
+      }
+    }
+  }
+
+  @if (products.pagination$ | async; as pagination) {
+    <div class="mt-6 flex flex-col gap-3 text-sm text-gray-600 dark:text-gray-300 sm:flex-row sm:items-center sm:justify-between">
+      <span i18n>Total: {{ pagination.total }}</span>
+      <div class="flex items-center gap-3">
+        <app-button variant="secondary" [disabled]="pagination.page <= 1" (click)="previousPage(pagination.page)" i18n>Previous</app-button>
+        <span i18n>Page {{ pagination.page }} of {{ pagination.totalPages }}</span>
+        <app-button variant="secondary" [disabled]="pagination.page >= pagination.totalPages" (click)="nextPage(pagination.page, pagination.totalPages)" i18n>Next</app-button>
+      </div>
+    </div>
+  }
+</main>

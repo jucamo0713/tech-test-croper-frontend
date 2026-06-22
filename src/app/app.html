@@ -1,1 +1,13 @@
+<nav class="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
+  <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
+    <a routerLink="/products" class="text-lg font-semibold text-gray-900 dark:text-white" i18n>Croper</a>
+    <div class="flex items-center gap-3">
+      <app-language-selector />
+      @if (auth.authenticated$ | async) {
+        <a routerLink="/products" class="text-sm font-medium text-gray-700 hover:text-blue-700 dark:text-gray-200" i18n>Products</a>
+        <button type="button" class="cursor-pointer text-sm font-medium text-gray-700 hover:text-blue-700 dark:text-gray-200" (click)="auth.logout()" i18n>Logout</button>
+      }
+    </div>
+  </div>
+</nav>
 <router-outlet />
