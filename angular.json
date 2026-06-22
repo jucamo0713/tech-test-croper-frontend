@@ -16,10 +16,7 @@
       "i18n": {
         "sourceLocale": "en-US",
         "locales": {
-          "es-CO": {
-            "translation": "src/locale/messages.es-CO.xlf",
-            "baseHref": "/es-CO/"
-          }
+          "es-CO": "src/locale/messages.es-CO.xlf"
         }
       },
       "architect": {
@@ -43,9 +40,7 @@
           },
           "configurations": {
             "production": {
-              "localize": [
-                "en-US"
-              ],
+              "localize": false,
               "budgets": [
                 {
                   "type": "initial",
